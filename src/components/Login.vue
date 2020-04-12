@@ -12,6 +12,9 @@
       <v-container class="content">
         <v-row>
           <v-col cols="12">
+            <section id="firebaseui-auth-container"></section>
+          </v-col>
+          <v-col cols="12">
             <v-text-field
               prepend-icon="mdi-account"
               v-model="datas.username"
@@ -43,6 +46,9 @@
   </v-card>
 </template>
 <script>
+import firebase from "firebase";
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
 export default {
   name: "Login",
   data: () => ({
@@ -57,6 +63,17 @@ export default {
       }
     }
   }),
+  mounted() {
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var uiConfig = {
+      signInSuccessUrl: "/userhome",
+      signInOptions: [
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+      ]
+    };
+    ui.start("#firebaseui-auth-container", uiConfig);
+  },
   methods: {
     login: function() {
       let datas = this.datas;
